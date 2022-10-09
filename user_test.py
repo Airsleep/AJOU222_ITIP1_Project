@@ -13,7 +13,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = '가져올 웹사이트 주소'
+url = ''
 
 response = requests.get(url)
 
@@ -24,3 +24,5 @@ if response.status_code == 200:
 
 else:
     print(response.status_code)
+
+print("hi")
