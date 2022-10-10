@@ -13,16 +13,19 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = ''
+url = 'https://www.acmicpc.net/user/koosaga'
 
 response = requests.get(url)
 
 if response.status_code == 200:
     html = response.text
     soup = BeautifulSoup(html, 'html.parser')
-    print(soup)
+    problem_container = soup.find("div", {"class": "problem-list"})
+    problems = problem_container.find_all("a")
+    problem_list = []
+    for p in problems:
+        problem_list.append(p.text)
+    print(problem_list)
 
 else:
     print(response.status_code)
-
-print("hi")
