@@ -49,7 +49,8 @@ while isEnd != True:
                 # print(user_response.ok)
                 html_user = user_response.text
                 soup_user = BeautifulSoup(html_user, "html.parser")
-                problem_container = soup_user.find("div", {"class": "problem-list"})
+                problem_container = soup_user.find(
+                    "div", {"class": "problem-list"})
                 # print(problem_container)
                 problems = problem_container.find_all("a")
                 problem_list = []
