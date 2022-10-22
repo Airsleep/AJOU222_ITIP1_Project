@@ -1,3 +1,4 @@
+# solved.ac에서 직접 사용자의 정보에 대하여 crawling 불가능
 from xml.dom.minidom import TypeInfo
 import requests
 import time

@@ -25,6 +25,7 @@ def crawl(page):
     temp = dict()
     temp["item"] = json.loads(response.text).get("items")
     for item in temp["item"]:
+        print(item)
         hash = int(item.get("problemId")) * 1000
         title = item.get("titleKo")
         tags = ""
@@ -49,13 +50,14 @@ def make_csv():
 
 
 def main():
-    for i in range(1, 250):
-        print(f"crawling {i} page now still {249 - i} to go")
-        crawl(i)
+    # for i in range(1, 250):
+    #     print(f"crawling {i} page now still {249 - i} to go")
+    #     crawl(i)
 
-        time.sleep(12)
+    #     time.sleep(12)
 
-    make_csv()
+    # make_csv()
+    crawl(1)
 
 
 if __name__ == "__main__":
