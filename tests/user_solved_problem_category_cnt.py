@@ -29,7 +29,6 @@ def make_boj_problems_info():
     for line in boj_problem_list_reader:
         if line[0] == "PROBLEM_ID":
             continue
-        boj_problems[int(line[0])] = [line[1], line[2], line[3], line[4]]
         # 리스트 형태의 문자열을 리스트로 변환
         problem_tags = line[4].lstrip("[").rstrip("]")
         problem_tags = re.sub("'", "", problem_tags)
@@ -37,11 +36,10 @@ def make_boj_problems_info():
         problem_tags = re.sub(", ", "/", problem_tags).split('/')
         for tag in problem_tags:
             boj_problem_category.add(tag)
+        boj_problems[int(line[0])] = [line[1], line[2], line[3], problem_tags]
+
     # 공백 제거
     boj_problem_category.discard("")
-    # for p in boj_problem_category:
-    #     print(p)
-    # print(len(boj_problem_category))
     boj_problem_list_f.close()
 
 
@@ -59,18 +57,19 @@ def crawl_user_solved_problems(user):
     one_user_tags_cnt = dict()
     for tag in boj_problem_category:
         one_user_tags_cnt[tag] = 0
-    # print(boj_problems)
     for p in one_problem_list:
-        # print(p)
+        # 사라진 문제나 25880 이후의 문제가 있는 경우 예외처리
         try:
             pt = boj_problems[p][3]
-            # print(pt)
-        #     for t in boj_problems[p][3]:
-        #         one_user_tags_cnt[t] += 1
+            for t in pt:
+                one_user_tags_cnt[t] += 1
         except:
             pass
-
-    # print(one_user_tags_cnt)
+        # 예외 처리 x
+        # pt = boj_problems[p][3]
+        # for t in pt:
+        #     one_user_tags_cnt[t] += 1
+    print(one_user_tags_cnt)
 
 
 def crawl(user):

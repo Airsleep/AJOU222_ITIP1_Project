@@ -29,6 +29,8 @@ ranking_page_cnt = 0
 ranking_base_url = "https://www.acmicpc.net/ranklist/"
 user_profile_base_url = "https://www.acmicpc.net/user/"
 
+f_problem_list = open('')
+
 
 # 원하는 사용자의 해결한 문제 수에 따른 비슷한 사용자 구하기. 위 아래로 10명
 def get_similar_user_list(input_user_name):
