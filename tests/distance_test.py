@@ -68,3 +68,8 @@ for i in nodes.iter():
 ret_node2 = make_node(nodes2, 2, mat_with_tags[3])
 ret = simple_distance(nodes, nodes2)
 print(ret)
+
+x = Node('a', [Node('b', [Node('c', [Node('d', [Node('e', [])])])])])
+y = Node('b', [Node('c', [Node('d', [Node('e', [Node('a', [])])])])])
+print("-"*20 + "test")
+print(simple_distance(x, y))

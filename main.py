@@ -1,13 +1,7 @@
-from binhex import REASONABLY_LARGE
 from cmath import sqrt
-from email import header
-from random import betavariate
-from tkinter.simpledialog import SimpleDialog
-from unicodedata import name
 import requests
 import time
 import json
-import numpy as np
 import pandas as pd
 import csv
 import re
@@ -18,12 +12,12 @@ from zss import simple_distance, Node
 from bs4 import BeautifulSoup
 
 
-def get_recommended_problem(input_target_user):
+def get_recommended_problem(input_target_user, similar_boundary):
     target_user = dict()
     target_user_name = input_target_user
     error_users = list()
 
-    SIMILAR_BOUNDARY = 20
+    SIMILAR_BOUNDARY = similar_boundary
     similar_users = dict()
     similar_user_list = list()
     ranking_page_cnt = 0
@@ -39,13 +33,12 @@ def get_recommended_problem(input_target_user):
     백준에 존재하는 문제들의 정보를 구함
     전체 문제: boj_problems, dict(문제번호: 문제해시, 문제제목, 문제레벨, 문제태그)
     전체 문제 태그: boj_problem_tag, set(strings), 190개 존재
+    -------------------------------------------------------------------------------
     '''
     boj_problems = dict()
     boj_problem_tag = set()
     similar_user_problem_tag = set()
     similar_user_problem_tag_list = list()
-    user_solved_tag_cnts = dict()
-    similar_user_solved_tag_cnts = dict()
 
     def make_boj_problems_info():
         boj_problem_list_f = open(
@@ -317,7 +310,7 @@ def get_recommended_problem(input_target_user):
             cos_sim_normalized.append(
                 abs(round((cs - cos_sim_avg) / cos_sim_std, 2)))
 
-        print("-"*20 + "COSINE SIMILILARITY" + "-" * 20)
+        print("-"*20 + "COSINE SIMILARITY" + "-" * 20)
         print(cos_sim_normalized)
         return cos_sim_normalized
 
@@ -447,9 +440,9 @@ def get_recommended_problem(input_target_user):
         te_ary = te.fit(similar_user_problem_table).transform(
             similar_user_problem_table)
         df = pd.DataFrame(te_ary, columns=te.columns_)
-        mn_support = 0.4
+        mn_support = 0.3
         # mn_support = 0.1
-        frequent_itemsets = fpgrowth(
+        frequent_itemsets = apriori(
             df, min_support=mn_support, use_colnames=True)
 
         # print("-"*40)
@@ -469,15 +462,21 @@ def get_recommended_problem(input_target_user):
         # for f in frequent_itemsets_list_weighted:
         #     print(f)
         frequent_itemsets_list_weighted.sort(key=lambda x: -x[0])
+        if len(frequent_itemsets_list_weighted) == 0:
+            return []
         return frequent_itemsets_list_weighted[0][1]
 
+    ####################  FUNCTION MAIN  ####################
     s_time = time.time()
     # 백준 문제 정보 만들기
     make_boj_problems_info()
     # target user init
     target_user = get_user_info(target_user_name)
+    if target_user_name in error_users:
+        print("Target user is not subscribed to solvedac.")
+        return [], {}, 0
     print(target_user)
-    # similar user init, target user 기준
+    # similar user init, target user 기준으로 생성
     similar_user_list = get_similar_user_list(target_user)
 
     # 사용자들이 해결한 문제의 tag들을 가져옴.
@@ -543,11 +542,14 @@ def get_recommended_problem(input_target_user):
 
 
 if __name__ == "__main__":
-    input_user_name = str(input())
+    print("Input the target user and similar boundary. e.g.: gnaroshi 10")
+    input_string = input().split(' ')
+    input_user_name = str(input_string[0])
+    similar_boundary = int(input_string[1])
     final_recommend_problems_dict, final_problem_dict_top5, excute_time = get_recommended_problem(
-        input_user_name)
+        input_user_name, similar_boundary)
 
     print("-"*10 + "MAIN" + "-"*10)
     print(final_recommend_problems_dict)
     print(final_problem_dict_top5)
-    print(excute_time)
+    print("Excuted time: {t}s".format(t=excute_time))
