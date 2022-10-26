@@ -6,6 +6,7 @@ import pandas as pd
 import csv
 import re
 import pandas as pd
+import matplotlib.pyplot as plt
 from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import apriori, fpmax, fpgrowth
 from zss import simple_distance, Node
@@ -13,11 +14,13 @@ from bs4 import BeautifulSoup
 
 
 def get_recommended_problem(input_target_user, similar_boundary):
+    # ==========================MATPLOTLIB================================
+    # fig, axes = plt.subplots(2, 2)
     target_user = dict()
     target_user_name = input_target_user
     error_users = list()
 
-    SIMILAR_BOUNDARY = similar_boundary
+    SIMILAR_BOUNDARY = int(similar_boundary)
     similar_users = dict()
     similar_user_list = list()
     ranking_page_cnt = 0
@@ -42,7 +45,7 @@ def get_recommended_problem(input_target_user, similar_boundary):
 
     def make_boj_problems_info():
         boj_problem_list_f = open(
-            'practice/project/problem_list.csv', 'r', encoding='utf-8')
+            'problem_list2.csv', 'r', encoding='utf-8')
         boj_problem_list_reader = csv.reader(boj_problem_list_f)
         for line in boj_problem_list_reader:
             if line[0] == "PROBLEM_ID":
@@ -271,6 +274,29 @@ def get_recommended_problem(input_target_user, similar_boundary):
             similar_user_idx += 1
         # for u in tag_table:
         #     print(u)
+
+        ##################### tag 수 matplotlib으로 그래프 그리기 #####
+        sum_of_su_tags = []
+        tag_len = len(tag_table[0])
+        for i in range(tag_len):
+            sum_of_su_tags.append(0)
+        for i in range(tag_len):
+            for j in range(2, len(tag_table)):
+                sum_of_su_tags[i] += tag_table[j][i]
+        print("s"*40)
+        print(sum_of_su_tags)
+        print("s"*40)
+
+        x = [i for i in range(tag_len)]
+        ax0 = plt.subplot(2, 2, 1)
+        ax0.plot(x, sum_of_su_tags)
+        ax0.set_xlabel('TAG')
+        ax0.set_ylabel('COUNT')
+        ax0.set_xticks([i for i in range(tag_len)])
+        ax0.set_xticklabels(tag_table[0], rotation=45)
+
+        ###############################################################
+
         return tag_table
 
     def get_cos_sim(tag_table):
@@ -312,6 +338,21 @@ def get_recommended_problem(input_target_user, similar_boundary):
 
         print("-"*20 + "COSINE SIMILARITY" + "-" * 20)
         print(cos_sim_normalized)
+
+        ##################### tag 수 matplotlib으로 그래프 그리기 #####
+        sim_len = len(cos_sim_normalized)
+
+        x = [i for i in range(sim_len)]
+
+        ax1 = plt.subplot(2, 2, 2)
+        ax1.plot(x, cos_sim_normalized)
+        ax1.set_xlabel('SU')
+        ax1.set_ylabel('cosine similarity')
+        ax1.set_xticks([i for i in range(sim_len)])
+        ax1.set_xticklabels(similar_user_list, rotation=45)
+
+        ###############################################################
+
         return cos_sim_normalized
 
     def get_tree_sim(tag_col, tag_table):
@@ -364,6 +405,19 @@ def get_recommended_problem(input_target_user, similar_boundary):
 
         print("-"*20 + "TREE EDIT DISTANCE" + "-" * 20)
         print(tree_sim)
+
+        ##################### tag 수 matplotlib으로 그래프 그리기 #####
+        sim_len = len(tree_sim)
+
+        x = [i for i in range(sim_len)]
+        ax2 = plt.subplot(2, 2, 3)
+        ax2.plot(x, tree_sim)
+        ax2.set_xlabel('SU')
+        ax2.set_ylabel('tree edit distance')
+        ax2.set_xticks([i for i in range(sim_len)])
+        ax2.set_xticklabels(similar_user_list, rotation=45)
+
+        ###############################################################
         return tree_sim
 
     def make_table_of_weighted_problem_score():
@@ -421,6 +475,22 @@ def get_recommended_problem(input_target_user, similar_boundary):
         for fr in final_weighted_problem_dict:
             final_problem_dict_top5_list.append(
                 [fr, final_weighted_problem_dict[fr]])
+
+        ##################### tag 수 matplotlib으로 그래프 그리기 #####
+        x = [i for i in range(5)]
+        y = []
+        plist = []
+        for p in shared_problem_weighted_cnt_list[:5]:
+            plist.append(p[0])
+            y.append(p[1])
+        ax3 = plt.subplot(2, 2, 4)
+        ax3.plot(x, y)
+        ax3.set_xlabel('top 5 score problems')
+        ax3.set_ylabel('problem score')
+        ax3.set_xticks([i for i in range(5)])
+        ax3.set_xticklabels(plist, rotation=45)
+
+        ###############################################################
 
         return shared_problem_dict_cnt, shared_problem_just_cnt_list, final_problem_dict_top5_list
 
@@ -494,6 +564,8 @@ def get_recommended_problem(input_target_user, similar_boundary):
 
         similar_users[su]["tagscnt"] = crawl_user_solved_problems(
             su, int(similar_users[su]["solvedCount"] / 10))
+    for eu in error_users:
+        similar_user_list.remove(eu)
 
     # tag들을 alphabet 순으로 정렬
     get_similar_user_tag_set()
@@ -511,6 +583,11 @@ def get_recommended_problem(input_target_user, similar_boundary):
     for su in similar_users:
         similar_users[su]["cos_sim"] = similar_user_cos_sim[similarity_idx]
         similar_users[su]["tree_sim"] = similar_user_tree_sim[similarity_idx]
+        similarity_idx += 1
+
+    for su in similar_users:
+        print(su + " || cos: " + str(similar_users[su]["cos_sim"]
+                                     ) + " || tree: " + str(similar_users[su]["tree_sim"]))
 
     # print(target_user)
     shared_problem_dict_cnt, shared_problem_just_cnts, final_problem_dict_top5 = make_table_of_weighted_problem_score()
@@ -538,6 +615,12 @@ def get_recommended_problem(input_target_user, similar_boundary):
     e_time = time.time()
     excute_time = round(e_time - s_time, 3)
     print(f"{e_time - s_time:.5f} sec")
+
+    # ==========================MATPLOTLIB================================
+    plt.tight_layout()
+    # plt.xticks(rotation=45)
+    plt.show()
+
     return final_recommend_problems_dict, final_problem_dict_top5, excute_time
 
 
@@ -549,7 +632,7 @@ if __name__ == "__main__":
     final_recommend_problems_dict, final_problem_dict_top5, excute_time = get_recommended_problem(
         input_user_name, similar_boundary)
 
-    print("-"*10 + "MAIN" + "-"*10)
-    print(final_recommend_problems_dict)
-    print(final_problem_dict_top5)
-    print("Excuted time: {t}s".format(t=excute_time))
+    # print("-"*10 + "MAIN" + "-"*10)
+    # print(final_recommend_problems_dict)
+    # print(final_problem_dict_top5)
+    # print("Excuted time: {t}s".format(t=excute_time))

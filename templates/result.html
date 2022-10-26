@@ -1,0 +1,122 @@
+<html>
+    <head>
+        <meta
+            http-equiv="Content-Type"
+            content="text/html; charset=windows-1252"
+        />
+        <title>BOJPSR</title>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+
+    <body
+        onload="main()"
+        style="background-color: white"
+        cz-shortcut-listen="true"
+    >
+        <div class="mainText gradient">
+            <span>BOJ Problem Set Recommendation</span>
+        </div>
+        <div class="subText subGradient">
+            <span>with Solved.ac API</span>
+        </div>
+        <div class="mainContent">
+            <form method="GET"  action="/result" id = "inputValues">
+                <input 
+                    id="targetUserName"
+                    class="targetUserName"
+                    name="targetUserName"
+                    type="text"
+                    placeholder={{target_user_name}}
+                />
+                <input 
+                    id="similarBoundary"
+                    class="similarBoundary"
+                    name="similarBoundary"
+                    type="number"
+                    placeholder={{similar_boundary}}
+                />
+                <div class="btns">
+                    <button button type="submit" id="calculateBtn" href="/result">Get Problems!</button>
+                </div>
+            </form>
+        </div>
+        <div id = "similarUserList" class="subText">
+            <div>Similar Users</div>
+            <div>
+                {% for i in sul %}
+                    {{i}}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="mainContent">
+            <div></div>
+            <div>
+                <span></span>
+            </div>
+            <div id="frequentProblems" class="frequentProblems">
+                <div class="fpText">the problem that similar users solved the most!</div>
+                <div>
+                    <table class="fpTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">TITLE</th>
+                                <th scope="col">TIER</th>
+                                <th scope="col">TAGS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in ffpl%}
+                            <tr>
+                                <th scope="row">{{i[0]}}</th>
+                                <th scope="row">{{i[1]}}</th>
+                                <th scope="row">{{i[2]}}</th>
+                                <th scope="row">{{i[3]}}</th>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="topProblems" class="topProblems">
+                <div class="tpText">the 5 questions I recommend!</div>
+                <div>
+                    <table class="tpTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">TITLE</th>
+                                <th scope="col">TIER</th>
+                                <th scope="col">TAGS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in fptl%}
+                            <tr>
+                                <th scope="row">{{i[0]}}</th>
+                                <th scope="row">{{i[1]}}</th>
+                                <th scope="row">{{i[2]}}</th>
+                                <th scope="row">{{i[3]}}</th>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                </div>
+                <form id="matrixAInputs">
+                    <input
+                        id="mb00"
+                        class="topProblemsElement"
+                        type="text"
+                    />
+                    <br />
+                </form>
+            </div>
+        </div>
+        <div>
+            {{et}}
+        </div>
+        
+    </body>
+</html>
