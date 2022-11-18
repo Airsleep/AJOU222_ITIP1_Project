@@ -25,7 +25,7 @@ def get_recommended_problem(input_target_user, similar_boundary):
     user_base_url = "https://www.acmicpc.net/user/"
     user_profile_base_url = "https://www.acmicpc.net/user/"
 
-    # f_problem_list = open('practice/project/problem_list2.csv')
+    f_problem_list = open('practice/project/problem_list2.csv')
 
     '''
     -------------------------------------------------------------------------------
@@ -42,7 +42,9 @@ def get_recommended_problem(input_target_user, similar_boundary):
 
     def make_boj_problems_info():
         boj_problem_list_f = open(
-            './problem_list2.csv', 'r', encoding='utf-8')
+            '/Users/gnaroshi/22-2/ITIP1/practice/project/problem_list2.csv', 'r', encoding='utf-8')
+        # boj_problem_list_f = open(
+        #     './problem_list2.csv', 'r', encoding='utf-8')
         boj_problem_list_reader = csv.reader(boj_problem_list_f)
         for line in boj_problem_list_reader:
             if line[0] == "PROBLEM_ID":
