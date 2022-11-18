@@ -1,6 +1,6 @@
 import time
 import pandas as pd
-from BOJPSR import get_recommended_problem
+from util.BOJPSR import get_recommended_problem
 from flask import Flask, render_template, request, jsonify
 # from flask_ngrok import run_with_ngrok
 

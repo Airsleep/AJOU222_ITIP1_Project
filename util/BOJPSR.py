@@ -1,15 +1,18 @@
-from cmath import sqrt
-import requests
+import os
 import time
-import json
-import pandas as pd
-import csv
 import re
+import csv
+from cmath import sqrt
+import json
+import requests
 import pandas as pd
 from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import apriori, fpmax, fpgrowth
 from zss import simple_distance, Node
 from bs4 import BeautifulSoup
+
+
+current_working_directory = os.getcwd()
 
 
 def get_recommended_problem(input_target_user, similar_boundary):
@@ -25,7 +28,7 @@ def get_recommended_problem(input_target_user, similar_boundary):
     user_base_url = "https://www.acmicpc.net/user/"
     user_profile_base_url = "https://www.acmicpc.net/user/"
 
-    f_problem_list = open('practice/project/problem_list2.csv')
+    # f_problem_list = open('practice/project/problem_list2.csv')
 
     '''
     -------------------------------------------------------------------------------
@@ -42,7 +45,7 @@ def get_recommended_problem(input_target_user, similar_boundary):
 
     def make_boj_problems_info():
         boj_problem_list_f = open(
-            '/Users/gnaroshi/22-2/ITIP1/practice/project/problem_list2.csv', 'r', encoding='utf-8')
+            current_working_directory+'/util/problem_list.csv', 'r', encoding='utf-8')
         # boj_problem_list_f = open(
         #     './problem_list2.csv', 'r', encoding='utf-8')
         boj_problem_list_reader = csv.reader(boj_problem_list_f)
@@ -554,17 +557,3 @@ def get_recommended_problem(input_target_user, similar_boundary):
     print(f"{e_time - s_time:.5f} sec")
 
     return similar_user_list, final_frequent_problems_list, final_problem_dict_top5_list, excute_time
-
-
-# if __name__ == "__main__":
-#     print("Input the target user and similar boundary. e.g.: gnaroshi 10")
-#     input_string = input().split(' ')
-#     input_user_name = str(input_string[0])
-#     similar_boundary = int(input_string[1])
-#     final_frequent_problems_dict, final_problem_dict_top5, excute_time = get_recommended_problem(
-#         input_user_name, similar_boundary)
-
-#     print("-"*10 + "MAIN" + "-"*10)
-#     print(final_frequent_problems_dict)
-#     print(final_problem_dict_top5)
-#     print("Excuted time: {t}s".format(t=excute_time))
