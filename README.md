@@ -13,6 +13,9 @@
 - server_app.py
   - 본 파이썬 코드를 실행시키면 터미널에 Running on http://127.0.0.1:5000과 비슷한 맥락을 가지는 것이 출력 될 것입니다. 여기 로컬에 들어가서 간단하게 웹으로 본 프로젝트를 실행시켜볼 수 있습니다.
 
+## Requirement
+- modules
+  - requirements.txt를 참고해주시길 바랍니다.
 
 ---
 
