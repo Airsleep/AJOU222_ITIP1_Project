@@ -88,7 +88,7 @@ rank는 백준에서의 해결한 문제 수에 따른 순위를 말한다. targ
 
 ![Screen Shot 2022-10-25 at 21.34.04.png](Project%20-%20BOJPSR%20e4a472c612754ea0b05a7eea5a5e4fe5/Screen_Shot_2022-10-25_at_21.34.04.png)
 
-- TU는 ‘gnaroshi’, similar boundary는 10으로 하고 main.py를 실행했을 때 다음과 같은 결과를 얻을 수 있다. (2022년 10월 25일 기준) 2번째 줄은 사용자의 입력을 의미하며 각각 TU의 아이디, similar boundary를 의미한다. 3번째 줄은 TU에 대한 정보를 의미한다. 4, 5번째 줄은 TU를 기준으로 구한 SU의 아이디 목록이다. 6~7번째 줄은 EU에 대한 정보를 말한다. 9번째 줄은 cosine similarity를 의미한다. 11번째 줄은 tree edit distance를 의미한다. 13~15번째 줄은 계산된 frequent item set들 중에서 problem score의 합이 가장 큰 item set에 속한 문제들의 정보이다. 17번째 부터 21번째 줄은 problem score이 가장 큰 상위 5개의 문제에 대한 정보를 의미한다.
+- TU는 ‘gnaroshi’, similar boundary는 10으로 하고 main.py를 실행했을 때 다음과 같은 결과를 얻을 수 있다. (2022년 10월 25일 기준) 2번째 줄은 사용자의 입력을 의미하며 각각 TU의 아이디, similar boundary를 의미한다. 3번째 줄은 TU에 대한 정보를 의미한다. 4, 5번째 줄은 TU를 기준으로 구한 SU의 아이디 목록이다. 6, 7번째 줄은 EU에 대한 정보를 말한다. 9번째 줄은 cosine similarity를 의미한다. 11번째 줄은 tree edit distance를 의미한다. 13번쨰부터 15번째 줄은 계산된 frequent item set들 중에서 problem score의 합이 가장 큰 item set에 속한 문제들의 정보이다. 17번째부터 21번째 줄은 problem score이 가장 큰 상위 5개의 문제에 대한 정보를 의미한다.
 - TU에 대한 정보 - 'solvedCount': 353, 'rating': 1379, 'tier': 14
 - SU 목록 - ['dae0102528', 'mapbox', 'green4125', 'wjseoghss', 'slumbone', 'kkh9946', 'dkwjt001', 'csh3695', 'kjjee99', 'wbkhkyg', 'skkiss98', 'sgpk0717', 'mengchi501', 'hych0502', 'hoya54', 'mknl8520', 'ehehdgus1', 'xavy', 'wjdrms1388', 'dmsgh423', 'snowbj']
 - EU 목록 - [’wjseoghss’, ‘xavy’]
